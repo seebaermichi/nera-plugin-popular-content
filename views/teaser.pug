@@ -1,0 +1,6 @@
+if (app.popularContent.is_home_teaser.length > 0)
+  article
+    each item in app.popularContent.is_home_teaser
+      h3 #{ item.title }
+      p #{ item.description }
+      a(href=item.href) read more

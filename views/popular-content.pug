@@ -1,8 +1,6 @@
-if (app.popularContent.length > 0)
+if (app.popularContent.is_popular.length > 0)
   ul
-    each item in app.popularContent
+    each item in app.popularContent.is_popular
       li
-        a(href=item.href)
-          if (item.createdAt)
-            span #{ item.createdAt }&nbsp;
-          span #{ item.title }
+        span #{ item.title } -&nbsp;
+        span #{ app.fromNow(item.createdAt) }

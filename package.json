@@ -1,7 +1,7 @@
 {
   "name": "popular-content",
   "version": "1.0.0",
-  "description": "A plugin for static side generator nera to create a simple popular content list.",
+  "description": "A plugin for static side generator nera to create popular content.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
