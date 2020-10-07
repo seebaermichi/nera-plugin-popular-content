@@ -1,4 +1,4 @@
-collection:
+properties:
   - meta_property_name: is_popular
     order: desc
 

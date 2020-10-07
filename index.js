@@ -5,7 +5,7 @@ module.exports = (() => {
     const config = getConfig(`${__dirname}/config/popular-content.yaml`)
     const popularContent = {}
 
-    config.collection.forEach(({ meta_property_name, order }) => {
+    config.properties.forEach(({ meta_property_name, order }) => {
       popularContent[meta_property_name] = []
 
       pagesData.forEach(({ meta }) => {

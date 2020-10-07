@@ -7,7 +7,7 @@ The first thing you need to do is to place this plugin in the `src/plugins` fold
 
 In addition you need to define which property or properties the plugin should recognize in your markdown files. As an example you could set up the following in the plugins `config/popular-content.yaml` file:
 ```yaml
-collection:
+properties:
   - meta_property_name: is_home_teaser
     order: desc
 ```
