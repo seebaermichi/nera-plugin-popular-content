@@ -6,14 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["nera", "plugin", "popular content"],
+  "keywords": [
+    "nera",
+    "plugin",
+    "popular content"
+  ],
   "author": "“Michael <micha.becker79@gmail.com> (https://github.com/seebaermichi)",
   "license": "ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/seebaermichi/nera-plugin-popular-content"
   },
-  "dependencies": {
-    "moment": "^2.24.0"
-  }
+  "dependencies": {}
 }

@@ -3,4 +3,4 @@ if (app.popularContent.is_popular.length > 0)
     each item in app.popularContent.is_popular
       li
         span #{ item.title } -&nbsp;
-        span #{ app.fromNow(item.createdAt) }
+        span #{ item.createdAt.toLocaleString(app.lang) }
