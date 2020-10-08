@@ -11,14 +11,14 @@ module.exports = (() => {
       pagesData.forEach(({ meta }) => {
         if (meta[meta_property_name]) {
           popularContent[meta_property_name].push(meta)
-
-          popularContent[meta_property_name].sort((a, b) => {
-            if (order && order === 'desc') {
-              return b[meta_property_name] - a[meta_property_name]
-            }
-            return a[meta_property_name] - b[meta_property_name]
-          })
         }
+      })
+
+      popularContent[meta_property_name].sort((a, b) => {
+        if (order && order === 'desc') {
+          return b[meta_property_name] - a[meta_property_name]
+        }
+        return a[meta_property_name] - b[meta_property_name]
       })
     })
 
