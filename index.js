@@ -1,8 +1,9 @@
 const { getConfig } = require('../plugin-helper')
 
 module.exports = (() => {
+  const config = getConfig(`${__dirname}/config/popular-content.yaml`)
+
   const getPopularContent = pagesData => {
-    const config = getConfig(`${__dirname}/config/popular-content.yaml`)
     const popularContent = {}
 
     config.properties.forEach(({ meta_property_name, order }) => {
