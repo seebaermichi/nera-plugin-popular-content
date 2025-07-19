@@ -8,8 +8,10 @@ A plugin for the [Nera](https://github.com/seebaermichi/nera) static site genera
 -   Configurable sorting (ascending or descending)
 -   Multiple content groups in a single configuration
 -   Access all grouped content via `app.popularContent`
--   Includes ready-to-use Pug templates for common layouts
+-   Includes ready-to-use Pug templates with BEM CSS methodology
+-   Template publishing system for easy customization
 -   Lightweight and zero-runtime overhead
+-   Full compatibility with Nera v4.1.0+
 
 ## 🚀 Installation
 
@@ -176,13 +178,81 @@ properties:
       order: asc
 ```
 
+## 🛠️ Template Publishing
+
+Use the default templates provided by the plugin:
+
+```bash
+npx @nera-static/plugin-popular-content run publish-template
+```
+
+This copies the templates to:
+
+```
+views/vendor/plugin-popular-content/
+├── popular-content.pug    # Standard popular content list
+└── teaser.pug            # Homepage teaser cards
+```
+
+You can then include them in your layouts:
+
+```pug
+// Include popular content section
+include /views/vendor/plugin-popular-content/popular-content.pug
+
+// Include homepage teasers
+include /views/vendor/plugin-popular-content/teaser.pug
+```
+
+## 🎨 BEM CSS Classes
+
+The default templates use BEM (Block Element Modifier) methodology:
+
+**Popular Content Template:**
+-   `.popular-content` - Main container
+-   `.popular-content__title` - Section title
+-   `.popular-content__list` - Content list
+-   `.popular-content__item` - List item
+-   `.popular-content__link` - Content link
+-   `.popular-content__description` - Item description
+-   `.popular-content__date` - Creation date
+
+**Teaser Template:**
+-   `.home-teasers` - Main container
+-   `.home-teasers__title` - Section title
+-   `.home-teasers__grid` - Grid container
+-   `.home-teasers__card` - Individual teaser card
+-   `.home-teasers__header` - Card header
+-   `.home-teasers__card-title` - Card title
+-   `.home-teasers__content` - Card content area
+-   `.home-teasers__description` - Card description
+-   `.home-teasers__footer` - Card footer
+-   `.home-teasers__link` - Read more link
+
 ## 🧪 Development
 
 ```bash
 npm install
 npm test
 npm run lint
+npm run publish-template  # Publish templates to your project
 ```
+
+Tests are powered by [Vitest](https://vitest.dev) and cover:
+
+-   Content grouping and sorting functionality
+-   Template publishing logic and file overwrite prevention
+-   Configuration validation
+
+### 🔄 Compatibility
+
+-   **Nera v4.1.0+**: Full compatibility with latest static site generator
+-   **Node.js 18+**: Modern JavaScript features and ES modules
+-   **Plugin Utils v1.1.0+**: Enhanced plugin utilities integration
+
+### 🏗️ Architecture
+
+This plugin uses the `getAppData()` function to process page data and make popular content available via `app.popularContent`. Content is grouped by meta properties and sorted according to configuration.
 
 ### Git Hooks
 

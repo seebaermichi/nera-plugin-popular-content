@@ -50,8 +50,9 @@ export function getAppData(data) {
         })
     })
 
-    // Always return an object that will be merged into appData
+    // Always return complete app data with popularContent added
     return {
+        ...data.app,
         popularContent,
     }
 }

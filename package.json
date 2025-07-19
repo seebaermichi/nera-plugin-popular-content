@@ -1,6 +1,6 @@
 {
     "name": "@nera-static/plugin-popular-content",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "description": "A plugin for static site generator Nera to create lists with popular content based on meta properties.",
     "main": "index.js",
     "scripts": {
@@ -19,7 +19,8 @@
         "bin",
         "config",
         "views",
-        "index.js"
+        "index.js",
+        "CHANGELOG.md"
     ],
     "keywords": [
         "nera",
@@ -27,7 +28,8 @@
         "popular content",
         "static-site",
         "content",
-        "teaser"
+        "teaser",
+        "bem-css"
     ],
     "author": "Michael Becker",
     "license": "MIT",
@@ -40,7 +42,7 @@
     },
     "homepage": "https://github.com/seebaermichi/nera-plugin-popular-content#readme",
     "dependencies": {
-        "@nera-static/plugin-utils": "^1.0.3"
+        "@nera-static/plugin-utils": "^1.1.0"
     },
     "engines": {
         "node": ">=18"

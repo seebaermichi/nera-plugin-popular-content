@@ -144,8 +144,10 @@ describe('Popular Content plugin', () => {
 
         const result = getAppData({ pagesData, app: existingApp })
 
-        // Plugin should return object with popularContent that gets merged by Nera
+        // Plugin should return complete app data with popularContent merged in
         expect(result).toEqual({
+            siteTitle: 'My Site',
+            lang: 'en',
             popularContent: {
                 is_popular: [
                     {
