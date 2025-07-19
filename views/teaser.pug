@@ -1,6 +1,13 @@
-if (app.popularContent.is_home_teaser.length > 0)
-  article
-    each item in app.popularContent.is_home_teaser
-      h3 #{ item.title }
-      p #{ item.description }
-      a(href=item.href) read more
+if (app.popularContent.is_home_teaser && app.popularContent.is_home_teaser.length > 0)
+    section.home-teasers
+        h2.home-teasers__title Featured Content
+        .home-teasers__grid
+            each item in app.popularContent.is_home_teaser
+                article.home-teasers__card
+                    header.home-teasers__header
+                        h3.home-teasers__card-title #{item.title}
+                    .home-teasers__content
+                        if item.description
+                            p.home-teasers__description #{item.description}
+                    footer.home-teasers__footer
+                        a.home-teasers__link(href=item.href) Read more

@@ -1,21 +1,55 @@
 {
-  "name": "popular-content",
-  "version": "1.2.0",
-  "description": "A plugin for static side generator nera to create popular content.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "nera",
-    "plugin",
-    "popular content"
-  ],
-  "author": "“Michael <micha.becker79@gmail.com> (https://github.com/seebaermichi)",
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seebaermichi/nera-plugin-popular-content"
-  },
-  "dependencies": {}
+    "name": "@nera-static/plugin-popular-content",
+    "version": "2.0.0",
+    "description": "A plugin for static site generator Nera to create lists with popular content based on meta properties.",
+    "main": "index.js",
+    "scripts": {
+        "publish-template": "node ./bin/publish-template.js",
+        "lint": "eslint .",
+        "test": "vitest"
+    },
+    "type": "module",
+    "exports": {
+        ".": "./index.js"
+    },
+    "bin": {
+        "nera-popular-content": "./bin/publish-template.js"
+    },
+    "files": [
+        "bin",
+        "config",
+        "views",
+        "index.js"
+    ],
+    "keywords": [
+        "nera",
+        "plugin",
+        "popular content",
+        "static-site",
+        "content",
+        "teaser"
+    ],
+    "author": "Michael Becker",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/seebaermichi/nera-plugin-popular-content.git"
+    },
+    "bugs": {
+        "url": "https://github.com/seebaermichi/nera-plugin-popular-content/issues"
+    },
+    "homepage": "https://github.com/seebaermichi/nera-plugin-popular-content#readme",
+    "dependencies": {
+        "@nera-static/plugin-utils": "^1.0.3"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "devDependencies": {
+        "cheerio": "^1.1.0",
+        "eslint": "^9.31.0",
+        "husky": "^9.1.7",
+        "pug": "^3.0.3",
+        "vitest": "^3.2.4"
+    }
 }

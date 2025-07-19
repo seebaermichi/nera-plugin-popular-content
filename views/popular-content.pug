@@ -1,6 +1,11 @@
-if (app.popularContent.is_popular.length > 0)
-  ul
-    each item in app.popularContent.is_popular
-      li
-        span #{ item.title } -&nbsp;
-        span #{ item.createdAt.toLocaleString(app.lang) }
+if (app.popularContent.is_popular && app.popularContent.is_popular.length > 0)
+    section.popular-content
+        h2.popular-content__title Popular Content
+        ul.popular-content__list
+            each item in app.popularContent.is_popular
+                li.popular-content__item
+                    a.popular-content__link(href=item.href) #{item.title}
+                    if item.description
+                        p.popular-content__description #{item.description}
+                    if item.createdAt
+                        span.popular-content__date #{item.createdAt.toLocaleString()}

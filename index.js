@@ -1,43 +1,57 @@
-const { getConfig } = require('../plugin-helper')
+import { getConfig } from '@nera-static/plugin-utils'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-module.exports = (() => {
-    const config = getConfig(`${__dirname}/config/popular-content.yaml`)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-    const getPopularContent = pagesData => {
-        const popularContent = {}
+export function getAppData(data) {
+    const config = getConfig(
+        path.resolve(__dirname, 'config/popular-content.yaml')
+    )
 
-        config.properties.forEach(({ meta_property_name, order }) => {
-            popularContent[meta_property_name] = []
-
-            pagesData.forEach(({ meta, content }) => {
-                if (meta[meta_property_name]) {
-                    meta.content = content
-                    popularContent[meta_property_name].push(meta)
-                }
-            })
-
-            popularContent[meta_property_name].sort((a, b) => {
-                if (order && order === 'desc') {
-                    return b[meta_property_name] - a[meta_property_name]
-                }
-                return a[meta_property_name] - b[meta_property_name]
-            })
-        })
-
-        return popularContent
+    if (!config || !config.properties) {
+        console.warn(
+            '[Popular Content Plugin] No configuration found or invalid config structure'
+        )
+        return null // Return null to skip merge
     }
 
-    const getAppData = data => {
-        if (data.app !== null && typeof data.app === 'object') {
-            return Object.assign({}, data.app, {
-                popularContent: getPopularContent(data.pagesData)
-            })
+    const popularContent = {}
+
+    config.properties.forEach(({ meta_property_name, order = 'asc' }) => {
+        if (!meta_property_name) {
+            console.warn(
+                '[Popular Content Plugin] meta_property_name is required for each property'
+            )
+            return
         }
 
-        return data.app
-    }
+        popularContent[meta_property_name] = []
 
+        data.pagesData.forEach(({ meta, content }) => {
+            if (meta[meta_property_name] !== undefined) {
+                const item = {
+                    ...meta,
+                    content,
+                }
+                popularContent[meta_property_name].push(item)
+            }
+        })
+
+        // Sort by the meta property value
+        popularContent[meta_property_name].sort((a, b) => {
+            const valueA = a[meta_property_name]
+            const valueB = b[meta_property_name]
+
+            if (order === 'desc') {
+                return valueB - valueA
+            }
+            return valueA - valueB
+        })
+    })
+
+    // Always return an object that will be merged into appData
     return {
-        getAppData
+        popularContent,
     }
-})()
+}

@@ -1,3 +1,5 @@
 properties:
-  - meta_property_name: is_aktuelles
+  - meta_property_name: is_popular
+    order: desc
+  - meta_property_name: is_home_teaser
     order: desc
