@@ -209,6 +209,7 @@ include /views/vendor/plugin-popular-content/teaser.pug
 The default templates use BEM (Block Element Modifier) methodology:
 
 **Popular Content Template:**
+
 -   `.popular-content` - Main container
 -   `.popular-content__title` - Section title
 -   `.popular-content__list` - Content list
@@ -218,6 +219,7 @@ The default templates use BEM (Block Element Modifier) methodology:
 -   `.popular-content__date` - Creation date
 
 **Teaser Template:**
+
 -   `.home-teasers` - Main container
 -   `.home-teasers__title` - Section title
 -   `.home-teasers__grid` - Grid container
@@ -235,7 +237,6 @@ The default templates use BEM (Block Element Modifier) methodology:
 npm install
 npm test
 npm run lint
-npm run publish-template  # Publish templates to your project
 ```
 
 Tests are powered by [Vitest](https://vitest.dev) and cover:
