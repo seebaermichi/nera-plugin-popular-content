@@ -1,13 +1,13 @@
 import { getConfig } from '@nera-static/plugin-utils'
 import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const HOST_CONFIG_PATH = path.resolve(
+    process.cwd(),
+    'config/popular-content.yaml'
+)
 
 export function getAppData(data) {
-    const config = getConfig(
-        path.resolve(__dirname, 'config/popular-content.yaml')
-    )
+    const config = getConfig(HOST_CONFIG_PATH)
 
     if (!config || !config.properties) {
         console.warn(
