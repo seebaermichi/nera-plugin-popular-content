@@ -1,5 +1,8 @@
 # @nera-static/plugin-popular-content
 
+[![Test](https://github.com/seebaermichi/nera-plugin-popular-content/actions/workflows/test.yml/badge.svg)](https://github.com/seebaermichi/nera-plugin-popular-content/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/@nera-static/plugin-popular-content)](https://www.npmjs.com/package/@nera-static/plugin-popular-content)
+
 A plugin for the [Nera](https://github.com/seebaermichi/nera) static site generator that creates lists of popular content based on meta properties. Perfect for featured sections, homepage teasers, or content sliders.
 
 ## ✨ Features
