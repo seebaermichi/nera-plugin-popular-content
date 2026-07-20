@@ -1,8 +1,16 @@
-if (app.popularContent.is_popular && app.popularContent.is_popular.length > 0)
+//- Which meta property to render. Defaults to `is_popular`, the name in the
+//- shipped config. If you renamed meta_property_name in
+//- config/popular-content.yaml, set this before the include:
+//-     - var popularContentKey = 'my_name'
+//-     include ../vendor/plugin-popular-content/popular-content
+-
+    var key = typeof popularContentKey !== 'undefined' ? popularContentKey : 'is_popular'
+    var items = (app.popularContent && app.popularContent[key]) || []
+if items.length > 0
     section.popular-content
         h2.popular-content__title Popular Content
         ul.popular-content__list
-            each item in app.popularContent.is_popular
+            each item in items
                 li.popular-content__item
                     a.popular-content__link(href=item.href) #{item.title}
                     if item.description

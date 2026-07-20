@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-07-20
+
+### Added
+
+-   `--force` flag on `nera-popular-content`, to re-publish templates over an
+    existing `views/vendor/plugin-popular-content/` and overwrite local edits.
+    Without it, publishing still skips, as before
+-   `app.popularContentProperties` — the configured `meta_property_name`
+    values, in order. Useful when you have renamed them and need to resolve
+    the right key in a template
+-   the shipped templates accept an overriding key: set `popularContentKey`
+    (or `homeTeaserKey` for the teaser) before the include to render a
+    renamed property
+
+### Fixed
+
+-   **the build no longer dies when `config/popular-content.yaml` is absent.**
+    `getAppData` returned `null`, which the generator rejects with
+    *"getAppData returned invalid format, skipping replace"*, leaving
+    `app.popularContent` undefined — and the shipped templates then threw
+    `Cannot read properties of undefined (reading 'is_popular')`. `getAppData`
+    now returns the app object with an empty `popularContent`, so templates
+    and the README's examples render nothing instead of crashing
+-   the shipped templates guard against a missing `app.popularContent`, so
+    they are safe even if another plugin displaces the value
+-   the shipped templates no longer hardcode `is_popular` / `is_home_teaser`
+    with no way to change them, which silently rendered nothing for anyone
+    who had renamed `meta_property_name`
+
+### Changed
+
+-   configuration is read inside `getAppData` rather than at module load, so
+    edits to `config/popular-content.yaml` take effect without a restart
+-   `@nera-static/plugin-utils` range raised to `^1.2.0`, where `force` lands
+
+Rendered markup is unchanged: for any site that was already working, these
+templates produce byte-identical output. The difference is only in what
+happens when a key is missing — previously a crash, now an empty render.
+
+### Documentation
+
+-   corrected the include paths. They are relative to the including file, so
+    from a layout it is `include ../vendor/plugin-popular-content/…`; the
+    documented `views/vendor/…` resolved to `views/layouts/views/vendor/…`
+    and could never work
+-   the template examples now guard the individual key before reading
+    `.length`
+-   fixed an invalid `npx` invocation; the command is `npx nera-popular-content`
+
 ## [3.0.0] - 2025-07-20
 
 ### Changed

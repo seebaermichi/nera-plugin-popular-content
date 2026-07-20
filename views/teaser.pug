@@ -1,8 +1,16 @@
-if (app.popularContent.is_home_teaser && app.popularContent.is_home_teaser.length > 0)
+//- Which meta property to render. Defaults to `is_home_teaser`, the name in
+//- the shipped config. If you renamed meta_property_name in
+//- config/popular-content.yaml, set this before the include:
+//-     - var homeTeaserKey = 'my_name'
+//-     include ../vendor/plugin-popular-content/teaser
+-
+    var key = typeof homeTeaserKey !== 'undefined' ? homeTeaserKey : 'is_home_teaser'
+    var items = (app.popularContent && app.popularContent[key]) || []
+if items.length > 0
     section.home-teasers
         h2.home-teasers__title Featured Content
         .home-teasers__grid
-            each item in app.popularContent.is_home_teaser
+            each item in items
                 article.home-teasers__card
                     header.home-teasers__header
                         h3.home-teasers__card-title #{item.title}

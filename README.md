@@ -65,7 +65,7 @@ is_home_teaser: 2
 ### Access in templates
 
 ```pug
-if app.popularContent.is_popular.length > 0
+if app.popularContent.is_popular && app.popularContent.is_popular.length > 0
   section.popular-content
     h2 Popular Articles
     ul
@@ -74,7 +74,7 @@ if app.popularContent.is_popular.length > 0
           a(href=item.href) #{item.title}
           p #{item.description}
 
-if app.popularContent.is_home_teaser.length > 0
+if app.popularContent.is_home_teaser && app.popularContent.is_home_teaser.length > 0
   section.home-teasers
     each item in app.popularContent.is_home_teaser
       article.teaser
@@ -82,6 +82,16 @@ if app.popularContent.is_home_teaser.length > 0
         p #{item.description}
         a(href=item.href) Read more
 ```
+
+`app.popularContent` is always defined — it is `{}` when no properties are
+configured — so the outer `if` is enough. Check the individual key as shown
+above rather than assuming it exists: a key only appears once it is listed in
+`config/popular-content.yaml`.
+
+The names used here (`is_popular`, `is_home_teaser`) are the ones in the
+shipped config. If you rename `meta_property_name`, the key in
+`app.popularContent` changes with it — `app.popularContentProperties` lists the
+configured names in order.
 
 ### Available data structure
 
@@ -100,7 +110,7 @@ if app.popularContent.is_home_teaser.length > 0
 Use the default templates provided by the plugin:
 
 ```bash
-npx @nera-static/plugin-popular-content run publish-template
+npx nera-popular-content
 ```
 
 This copies:
@@ -111,11 +121,35 @@ views/vendor/plugin-popular-content/
 └── teaser.pug
 ```
 
+Publishing skips when the destination already exists, so re-running never
+discards your edits. To overwrite them with the packaged versions:
+
+```bash
+npx nera-popular-content --force
+```
+
 Include them in your layout:
 
 ```pug
-include views/vendor/plugin-popular-content/popular-content
-include views/vendor/plugin-popular-content/teaser
+include ../vendor/plugin-popular-content/popular-content
+include ../vendor/plugin-popular-content/teaser
+```
+
+The path is relative to the **including file**. From a layout in
+`views/layouts/`, `../vendor/…` resolves to `views/vendor/…`. A bare
+`views/vendor/…` would resolve to `views/layouts/views/vendor/…` and fail.
+
+### Renamed properties
+
+The shipped templates render `is_popular` and `is_home_teaser`. If you renamed
+`meta_property_name`, set the key before the include:
+
+```pug
+- var popularContentKey = 'my_popular_name'
+include ../vendor/plugin-popular-content/popular-content
+
+- var homeTeaserKey = 'my_teaser_name'
+include ../vendor/plugin-popular-content/teaser
 ```
 
 ## 🎨 Styling
