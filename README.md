@@ -43,6 +43,11 @@ properties:
 - `meta_property_name`: The meta field to group by
 - `order`: Sort direction (`asc` or `desc`, default: `asc`)
 
+Values are compared **numerically** when they are numbers (the intended use —
+`is_popular: 3` outranks `is_popular: 1`). Non-numeric values fall back to a
+locale string compare, and items with equal values are ordered by creation
+date (oldest first) so the result is always deterministic.
+
 ## 🧩 Usage
 
 ### Mark content with metadata
@@ -124,12 +129,20 @@ views/vendor/plugin-popular-content/
 └── teaser.pug
 ```
 
-Publishing skips when the destination already exists, so re-running never
-discards your edits. To overwrite them with the packaged versions:
+Publishing skips when the destination **directory**
+`views/vendor/plugin-popular-content/` already exists — the check is on the
+directory, not on each file — so re-running never discards your edits. To
+overwrite them with the packaged versions:
 
 ```bash
 npx nera-popular-content --force
 ```
+
+> **Upgrading the plugin?** A new plugin version does not update templates you
+> have already published — the skip above means a plain re-run copies nothing
+> and exits successfully. `--force` is what **delivers** an updated template to
+> a site that published before. It overwrites the whole directory, so diff your
+> copies first if you have customised them.
 
 Include them in your layout:
 
@@ -156,6 +169,10 @@ include ../vendor/plugin-popular-content/teaser
 ```
 
 ## 🎨 Styling
+
+These class names are a **public contract**: you style them from your own CSS
+once you publish the templates, so renaming one is a **breaking change** and
+ships as a major version.
 
 Default templates use BEM CSS methodology:
 
@@ -184,13 +201,52 @@ Default templates use BEM CSS methodology:
 
 ## 📊 Generated Output
 
-The plugin injects grouped and sorted content into `app.popularContent`. Use templates or custom markup to render the output.
+The plugin injects grouped and sorted content into `app.popularContent`. The
+shipped templates then render it. With two `is_popular` pages and one
+`is_home_teaser` page, `popular-content.pug` produces:
+
+```html
+<section class="popular-content">
+  <h2 class="popular-content__title">Popular Content</h2>
+  <ul class="popular-content__list">
+    <li class="popular-content__item"><a class="popular-content__link" href="/getting-started.html">Getting Started with Nera</a>
+      <p class="popular-content__description">A gentle introduction.</p>
+    </li>
+    <li class="popular-content__item"><a class="popular-content__link" href="/plugins.html">Plugin Basics</a>
+      <p class="popular-content__description">Write your first plugin.</p>
+    </li>
+  </ul>
+</section>
+```
+
+and `teaser.pug` produces:
+
+```html
+<section class="home-teasers">
+  <h2 class="home-teasers__title">Featured Content</h2>
+  <div class="home-teasers__grid">
+    <article class="home-teasers__card">
+      <header class="home-teasers__header">
+        <h3 class="home-teasers__card-title">Why Static Sites</h3>
+      </header>
+      <div class="home-teasers__content">
+        <p class="home-teasers__description">Speed, security, simplicity.</p>
+      </div>
+      <footer class="home-teasers__footer"><a class="home-teasers__link" href="/why-static.html">Read more</a></footer>
+    </article>
+  </div>
+</section>
+```
+
+A `popular-content__date` span is added per item when the page has a
+`createdAt`. Pages without a `layout` in their frontmatter are skipped by the
+generator and never appear in either list.
 
 ## 🧪 Development
 
 ```bash
 npm install
-npm test
+npx vitest run    # single pass; `npm test` runs Vitest in watch mode
 npm run lint
 ```
 
@@ -202,9 +258,23 @@ Tests use [Vitest](https://vitest.dev) and [Cheerio](https://cheerio.js.org) to 
 - Template rendering and structure
 - Publishing logic and file overwrite protection
 
+## 🤝 Contributing
+
+Issues and pull requests are welcome. See the
+[Nera contributing guide](https://github.com/seebaermichi/nera/blob/main/CONTRIBUTING.md)
+for plugin development, the hook contract, and local setup.
+
+For this repo specifically:
+
+- `npx vitest run` and `npm run lint` must pass (`npm test` is watch mode).
+- Bump the version and update `CHANGELOG.md` **in the same commit** as the change.
+- Template markup and BEM class names are a **public contract** — users style
+  them from their own CSS, so changing one is a **major** bump.
+- Releases publish from CI on a pushed `v*` tag. Never run `npm publish`.
+
 ## 🧑‍💻 Author
 
-Michael Becker
+Michael Becker  
 [https://github.com/seebaermichi](https://github.com/seebaermichi)
 
 ## 🔗 Links
@@ -215,8 +285,10 @@ Michael Becker
 
 ## 🧩 Compatibility
 
-- **Nera**: v4.1.0+
-- **Node.js**: >= 18
+- **Nera**: v4.1.0+ (baseline; the plugin uses no generator feature above the
+  4.x line, and the relative include below needs no `basedir`)
+- **Node.js**: >= 20
+- **Plugin Utils**: `@nera-static/plugin-utils` ^1.2.0
 - **Plugin API**: Uses `getAppData()` for global content aggregation
 
 ## 📦 License

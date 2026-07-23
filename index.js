@@ -46,15 +46,47 @@ export function getAppData(data) {
             }
         })
 
-        // Sort by the meta property value
+        // Sort by the meta property value. Compare numerically when both
+        // values are numbers, otherwise fall back to a locale string compare:
+        // a bare `valueA - valueB` returns NaN for a non-numeric value, and a
+        // comparator returning NaN makes Array.prototype.sort undefined
+        // behaviour — the output order then depends only on the order the pages
+        // happened to arrive in. Numeric strings ('10' vs '2') still compare
+        // numerically. Remaining ties break on createdAt so equal values are
+        // deterministic too.
+        const direction = order === 'desc' ? -1 : 1
         popularContent[meta_property_name].sort((a, b) => {
             const valueA = a[meta_property_name]
             const valueB = b[meta_property_name]
+            const numberA = Number(valueA)
+            const numberB = Number(valueB)
 
-            if (order === 'desc') {
-                return valueB - valueA
+            if (!Number.isNaN(numberA) && !Number.isNaN(numberB)) {
+                if (numberA !== numberB) {
+                    return direction * (numberA - numberB)
+                }
+            } else {
+                const byString = String(valueA).localeCompare(String(valueB))
+                if (byString !== 0) {
+                    return direction * byString
+                }
             }
-            return valueA - valueB
+
+            // Deterministic tie-break on creation date (oldest first),
+            // independent of sort direction. Pages without a valid createdAt
+            // sort after those that have one.
+            const dateA = new Date(a.createdAt).getTime()
+            const dateB = new Date(b.createdAt).getTime()
+            const validA = !Number.isNaN(dateA)
+            const validB = !Number.isNaN(dateB)
+
+            if (validA && validB) {
+                return dateA - dateB
+            }
+            if (validA !== validB) {
+                return validA ? -1 : 1
+            }
+            return 0
         })
     })
 

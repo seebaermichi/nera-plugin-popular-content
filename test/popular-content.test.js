@@ -277,6 +277,71 @@ describe('Popular Content plugin', () => {
         })
     })
 
+    // Regression: the comparator was `valueA - valueB`, which returns NaN for a
+    // non-numeric value. A NaN-returning comparator makes Array.prototype.sort
+    // undefined behaviour, so a string-valued property came out in a different
+    // order for each input permutation. It must now be deterministic.
+    describe('with non-numeric meta values', () => {
+        beforeEach(() =>
+            writeConfig('properties:\n  - meta_property_name: rank\n    order: desc\n')
+        )
+
+        const pages = [
+            { content: 'a', meta: { title: 'A', rank: 'high' } },
+            { content: 'b', meta: { title: 'B', rank: 'low' } },
+            { content: 'c', meta: { title: 'C', rank: 'medium' } },
+            { content: 'd', meta: { title: 'D', rank: 'urgent' } },
+        ]
+
+        const permutations = (arr) =>
+            arr.length <= 1
+                ? [arr]
+                : arr.flatMap((item, i) =>
+                    permutations([
+                        ...arr.slice(0, i),
+                        ...arr.slice(i + 1),
+                    ]).map((rest) => [item, ...rest])
+                )
+
+        it('produces the same order regardless of input order', () => {
+            const orderings = new Set(
+                permutations(pages).map((p) =>
+                    getAppData({ pagesData: p, app: {} })
+                        .popularContent.rank.map((x) => x.title)
+                        .join('')
+                )
+            )
+
+            expect(orderings.size).toBe(1)
+            // desc + localeCompare: 'urgent' > 'medium' > 'low' > 'high'
+            expect([...orderings][0]).toBe('DCBA')
+        })
+    })
+
+    // Equal primary values must be ordered deterministically by createdAt
+    // rather than left to the order pages happened to arrive in.
+    describe('tie-breaking on equal values', () => {
+        beforeEach(() =>
+            writeConfig('properties:\n  - meta_property_name: is_popular\n    order: desc\n')
+        )
+
+        it('breaks ties on createdAt, oldest first, independent of input order', () => {
+            const older = new Date('2020-01-01')
+            const newer = new Date('2024-01-01')
+            const forward = [
+                { content: 'n', meta: { title: 'Newer', is_popular: 1, createdAt: newer } },
+                { content: 'o', meta: { title: 'Older', is_popular: 1, createdAt: older } },
+            ]
+
+            const orderOf = (pagesData) =>
+                getAppData({ pagesData, app: {} })
+                    .popularContent.is_popular.map((x) => x.title)
+
+            expect(orderOf(forward)).toEqual(['Older', 'Newer'])
+            expect(orderOf([...forward].reverse())).toEqual(['Older', 'Newer'])
+        })
+    })
+
     describe('template rendering', () => {
         beforeEach(() => writeConfig(DEFAULT_CONFIG))
 

@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2026-07-23
+
+### Fixed
+
+-   **sorting is now deterministic for non-numeric values.** The comparator was
+    `valueA - valueB`, which returns `NaN` for any non-numeric
+    `meta_property_name` value; a `NaN`-returning comparator makes
+    `Array.prototype.sort` undefined behaviour, so a string-valued property came
+    out in a different order for every input permutation. Values are now compared
+    numerically when both are numbers, with a locale string fallback otherwise,
+    and equal values break the tie on `createdAt` (oldest first). Numeric-ranked
+    sites with **distinct** values are unaffected; sites that relied on the
+    incidental order of items sharing the **same** value now get a stable,
+    date-based order instead
+
+### Documentation
+
+-   corrected the Node line (`>= 18` → `>= 20`, matching `engines.node`) and
+    added the `@nera-static/plugin-utils` range to the Compatibility block
+-   documented the numeric/string comparison rule and the `createdAt` tie-break
+-   added a `## 🤝 Contributing` section linking the Nera contributing guide
+-   Development section now shows `npx vitest run` and notes `npm test` is watch
+    mode
+-   noted that the published BEM class names are a public contract, so renaming
+    one is a major change
+-   replaced the placeholder Generated Output section with the actual rendered
+    markup of both shipped templates
+-   framed `--force` as what delivers a template update to a site that has
+    already published, and stated the skip is directory-level
+-   restored the Author hard break so the name and URL render on separate lines
+
 ## [3.2.0] - 2026-07-21
 
 ### Changed
