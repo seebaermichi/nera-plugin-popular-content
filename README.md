@@ -126,13 +126,17 @@ npx nera-popular-content
 This copies:
 
 ```
-views/vendor/plugin-popular-content/
+theme/views/vendor/plugin-popular-content/
 ├── popular-content.pug
 └── teaser.pug
 ```
 
+That is the path on a site scaffolded with `nera new`, whose views live in
+`theme/views/`. On an older site that renders from root `views/`, drop the
+`theme/` prefix — the command picks the right destination automatically.
+
 Publishing skips when the destination **directory**
-`views/vendor/plugin-popular-content/` already exists — the check is on the
+`…/vendor/plugin-popular-content/` already exists — the check is on the
 directory, not on each file — so re-running never discards your edits. To
 overwrite them with the packaged versions:
 
@@ -153,11 +157,12 @@ include ../vendor/plugin-popular-content/popular-content
 include ../vendor/plugin-popular-content/teaser
 ```
 
-The path is relative to the **including file**. From a layout in
-`views/layouts/`, `../vendor/…` resolves to `views/vendor/…`. A bare
-`views/vendor/…` would resolve to `views/layouts/views/vendor/…` and fail. On
-Nera v4.3.0+ you can use the location-independent form instead, which works
-from any depth:
+The path is relative to the **including file**. From the shell layout
+`theme/views/layouts/layout.pug` (or a page template in `theme/views/pages/`),
+`../vendor/…` resolves to `theme/views/vendor/…`. A bare `vendor/…` would
+resolve to `theme/views/layouts/vendor/…` and fail. On Nera v4.3.0+ you can use
+the location-independent form instead, which works from any depth — there is no
+`theme/` or `views/` segment in it:
 
 ```pug
 include /vendor/plugin-popular-content/popular-content
@@ -297,7 +302,8 @@ Michael Becker
 
 - **Nera**: v4.1.0+ (baseline; the plugin uses no generator feature above the
   4.x line, and the relative include needs no `basedir`). The root-absolute
-  `include /vendor/…` form needs v4.3.0+.
+  `include /vendor/…` form needs v4.3.0+, and the `theme/` folder layout used in
+  the examples above — what `nera new` scaffolds — needs v4.6.0+.
 - **Node.js**: >= 20.0.0
 - **Plugin Utils**: `@nera-static/plugin-utils` ^1.2.0
 - **Plugin API**: Uses `getAppData()` for global content aggregation
