@@ -155,7 +155,14 @@ include ../vendor/plugin-popular-content/teaser
 
 The path is relative to the **including file**. From a layout in
 `views/layouts/`, `../vendor/…` resolves to `views/vendor/…`. A bare
-`views/vendor/…` would resolve to `views/layouts/views/vendor/…` and fail.
+`views/vendor/…` would resolve to `views/layouts/views/vendor/…` and fail. On
+Nera v4.3.0+ you can use the location-independent form instead, which works
+from any depth:
+
+```pug
+include /vendor/plugin-popular-content/popular-content
+include /vendor/plugin-popular-content/teaser
+```
 
 ### Renamed properties
 
@@ -289,8 +296,9 @@ Michael Becker
 ## 🧩 Compatibility
 
 - **Nera**: v4.1.0+ (baseline; the plugin uses no generator feature above the
-  4.x line, and the relative include below needs no `basedir`)
-- **Node.js**: >= 20
+  4.x line, and the relative include needs no `basedir`). The root-absolute
+  `include /vendor/…` form needs v4.3.0+.
+- **Node.js**: >= 20.0.0
 - **Plugin Utils**: `@nera-static/plugin-utils` ^1.2.0
 - **Plugin API**: Uses `getAppData()` for global content aggregation
 
